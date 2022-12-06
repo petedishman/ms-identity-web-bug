@@ -21,20 +21,20 @@ public class Program
 
                     builder.Configuration.GetSection("AzureAd").Bind(msIdentityOptions);
 
-                    Console.WriteLine("Configure ms identity options");
                     CallCounts.MsIdentityOptionsConfiguration++;
+                    Console.WriteLine("Configure ms identity options (call {0})", CallCounts.MsIdentityOptionsConfiguration);
 
                     msIdentityOptions.Events.OnRedirectToIdentityProvider = context => { 
-                        Console.WriteLine("Denied");
                         CallCounts.RedirectToIdProvider++;
+                        Console.WriteLine("OnRedirectToIdentityProvider called (call {0})", CallCounts.RedirectToIdProvider);
                         return Task.CompletedTask; 
                     };
                 })
             .EnableTokenAcquisitionToCallDownstreamApi(clientAppOptions => {
                 // this is clientApplicationOptionsConfiguration callback in tests
 
-                Console.WriteLine("Configure client app options");
                 CallCounts.ClientAppOptionsConfiguration++;
+                Console.WriteLine("Configure client app options (call {0})", CallCounts.ClientAppOptionsConfiguration);
             })
             .AddInMemoryTokenCaches();
 
